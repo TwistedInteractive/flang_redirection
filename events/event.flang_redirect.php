@@ -57,6 +57,8 @@
 					
 				$hasUrlLanguage = strlen($url_language_code) > 1;
 				
+				$check_browser_language = Symphony::Configuration()->get('check_browser_language', 'frontend_localisation');
+
 				// if we have a url language and this lang is valid
 				// no redirect, set current language and region in cookie
 				if ($hasUrlLanguage && FLang::validateLangCode($url_language_code)) {
@@ -87,12 +89,14 @@
 					$browser_language = null;
 					$in_browser_languages = false;
 					
-					foreach ($browser_languages as $language) {
-						if (FLang::validateLangCode($language)) {
-							$in_browser_languages = true;
-							$browser_language = $language;
-							break;
-						};
+					if ( $check_browser_language === 'yes' ) {
+						foreach ($browser_languages as $language) {
+							if (FLang::validateLangCode($language)) {
+								$in_browser_languages = true;
+								$browser_language = $language;
+								break;
+							};
+						}
 					}
 					
 					// get the cookie value
